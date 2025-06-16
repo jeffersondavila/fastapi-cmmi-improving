@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.12"        # usa la versión LTS más reciente
+        python-version: "3.12"
 
     - name: Install dependencies
       run: |
@@ -24,19 +24,16 @@ jobs:
         pip install -r requirements.txt
         pip install bandit pytest coverage
 
-    # ► GOV – Escaneo de seguridad
-    - name: Run Bandit
-      run: bandit -r src -ll -o bandit.txt -f txt
+    # ► GOV – Seguridad (usa script)
+    - name: GOV – Check compliance script
+      run: bash scripts/gov_check_compliance.sh
 
-    - name: Fail if Bandit findings Medium/High (policy)
-      run: |
-        if grep -qE "Severity: (Medium|High)" bandit.txt; then
-          echo "::error ::Bandit Medium/High findings detected"
-          exit 1
-        fi
+    # ► PCM – Gate de proceso (exige CHANGELOG.md)
+    - name: PCM – CHANGELOG gate
+      run: python scripts/pcm_gate_pipeline.py
 
-    # ► PCM – Tests + cobertura
-    - name: Run unit tests with coverage
+    # ► Pruebas + cobertura
+    - name: Run tests and generate coverage
       run: |
         coverage run -m pytest
         coverage xml -o coverage.xml
@@ -47,6 +44,6 @@ jobs:
         name: coverage
         path: coverage.xml
 
-    # ► MPM – Extraer cobertura para log (simple)
-    - name: Show coverage %
-      run: coverage report
+    # ► MPM – Registrar KPI de cobertura
+    - name: MPM – Registrar cobertura
+      run: python scripts/mpm_kpi_tracker.py coverage.xml
