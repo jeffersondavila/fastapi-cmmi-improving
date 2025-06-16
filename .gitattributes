@@ -1,0 +1,3 @@
+﻿# For shell and Python scripts, always use LF
+*.sh text eol=lf
+*.py text eol=lf
