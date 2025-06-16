@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+﻿from datetime import datetime, timezone
 from fastapi import FastAPI
 
 app = FastAPI(title="FastAPI CMMI Demo", version="0.1.0")
@@ -10,5 +10,5 @@ def read_health():
     """
     return {
         "status": "ok",
-        "timestamp": datetime.utcnow().isoformat(timespec="seconds")
+        "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds")
     }
