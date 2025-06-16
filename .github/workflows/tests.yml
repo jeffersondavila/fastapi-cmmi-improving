@@ -1,0 +1,52 @@
+name: CI-CMMI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build-test-security:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"        # usa la versión LTS más reciente
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install bandit pytest coverage
+
+    # ► GOV – Escaneo de seguridad
+    - name: Run Bandit
+      run: bandit -r src -ll -o bandit.txt -f txt
+
+    - name: Fail if Bandit findings Medium/High (policy)
+      run: |
+        if grep -qE "Severity: (Medium|High)" bandit.txt; then
+          echo "::error ::Bandit Medium/High findings detected"
+          exit 1
+        fi
+
+    # ► PCM – Tests + cobertura
+    - name: Run unit tests with coverage
+      run: |
+        coverage run -m pytest
+        coverage xml -o coverage.xml
+
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage
+        path: coverage.xml
+
+    # ► MPM – Extraer cobertura para log (simple)
+    - name: Show coverage %
+      run: coverage report
