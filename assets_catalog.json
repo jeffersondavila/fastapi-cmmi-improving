@@ -1,0 +1,32 @@
+[
+  {
+    "name": "gov_check_compliance.sh",
+    "path": "scripts\\gov_check_compliance.sh",
+    "mtime": "2025-06-15",
+    "owner": "jefferson"
+  },
+  {
+    "name": "ii_deploy_docker.sh",
+    "path": "scripts\\ii_deploy_docker.sh",
+    "mtime": "2025-06-15",
+    "owner": "jefferson"
+  },
+  {
+    "name": "mpm_kpi_tracker.py",
+    "path": "scripts\\mpm_kpi_tracker.py",
+    "mtime": "2025-06-15",
+    "owner": "jefferson"
+  },
+  {
+    "name": "pad_asset_catalog.py",
+    "path": "scripts\\pad_asset_catalog.py",
+    "mtime": "2025-06-15",
+    "owner": "jefferson"
+  },
+  {
+    "name": "pcm_gate_pipeline.py",
+    "path": "scripts\\pcm_gate_pipeline.py",
+    "mtime": "2025-06-15",
+    "owner": "jefferson"
+  }
+]
